@@ -335,7 +335,7 @@ npm run lint
 
 ## 12. Author
 
-**Avuthu Heshmasree**
+**Avuthu Heshma Sree**
 - **Role**: Lead Full-Stack Software Engineer
 - **Email**: [avuthuheshmasree@gmail.com](mailto:avuthuheshmasree@gmail.com)
 - **GitHub**: [heshmasree2809](https://github.com/heshmasree2809)
