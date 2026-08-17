@@ -1,0 +1,6 @@
+{
+  "name": "SmartBank – Online Banking Portal",
+  "description": "Enterprise online banking management portal featuring customer, employee, and admin roles, money transfers with OTP, beneficiary management, fraud detection, and comprehensive technical architecture specifications.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
