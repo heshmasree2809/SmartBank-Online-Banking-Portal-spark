@@ -344,5 +344,4 @@ npm run lint
 - **Date**: August 2026
 
 ---
-
 *SmartBank — Enterprise Core Banking Architecture.*
