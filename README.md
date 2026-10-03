@@ -3,8 +3,7 @@
 A role-based banking web app built with **React 19**, **TypeScript**, **Tailwind CSS v4** and **Vite**. It simulates retail banking, a branch teller console and an admin/risk console, with double-entry ledger logic, simulated OTP confirmation, a rule-based fraud flag and an audit log.
 
 > **Scope note:** SmartBank is a client-side project. All data (users, accounts, transactions) lives in the browser's `localStorage`, seeded from mock data. There is no real backend, no real database and no real money movement. OTP, bill payments and card controls are simulated.
-
-**Live demo:** `<add your public URL>`  |  **Source:** https://github.com/heshmasree2809/SmartBank-Online-Banking-Portal-spark
+> **Source:** https://github.com/heshmasree2809/SmartBank-Online-Banking-Portal-spark
 
 ---
 
