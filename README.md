@@ -3,7 +3,8 @@
 A role-based banking web app built with **React 19**, **TypeScript**, **Tailwind CSS v4** and **Vite**. It simulates retail banking, a branch teller console and an admin/risk console, with double-entry ledger logic, simulated OTP confirmation, a rule-based fraud flag and an audit log.
 
 > **Scope note:** SmartBank is a client-side project. All data (users, accounts, transactions) lives in the browser's `localStorage`, seeded from mock data. There is no real backend, no real database and no real money movement. OTP, bill payments and card controls are simulated.
-> **Source:** https://github.com/heshmasree2809/SmartBank-Online-Banking-Portal-spark
+
+**Live demo:** `<add your public URL>`  |  **Source:** https://github.com/heshmasree2809/SmartBank-Online-Banking-Portal-spark
 
 ---
 
@@ -38,18 +39,21 @@ SmartBank brings three banking experiences into one interface: a retail customer
 
 Open the app and use the one-click role buttons on the login screen to switch between the three seeded demo profiles. Each walkthrough takes about a minute.
 
-Role	Try this	What to look for
-Customer	Go to Transfers, pick an account, choose a saved beneficiary and send a small amount	The OTP modal appears, then the balances update immediately and a receipt is shown
-Customer	Add a new beneficiary, then try to send money to it right away	The payee is in a 30-minute cooling period and the transfer is blocked
-Customer	Send a transfer above ₹1,00,000	The transaction is marked suspicious and appears in the admin fraud queue
-Customer	Open Cards and lock a card, then change a daily limit	The card status and limit update straight away
-Teller	Open the Cash Desk and record a deposit or withdrawal	A cash voucher is generated and the account balance changes
-Teller	Open KYC review and change a customer's KYC tier	The new tier shows on the customer's profile
-Admin	Open the AML queue, then the Audit Trail	The flagged transfer is listed, and each state change shows its actor, time and before/after values
+| Role | Try this | What to look for |
+|---|---|---|
+| **Customer** | Go to Transfers, pick an account, choose a saved beneficiary and send a small amount | The OTP modal appears, then the balances update immediately and a receipt is shown |
+| **Customer** | Add a new beneficiary, then try to send money to it right away | The payee is in a 30-minute cooling period and the transfer is blocked |
+| **Customer** | Send a transfer above ₹1,00,000 | The transaction is marked suspicious and appears in the admin fraud queue |
+| **Customer** | Open Cards and lock a card, then change a daily limit | The card status and limit update straight away |
+| **Teller** | Open the Cash Desk and record a deposit or withdrawal | A cash voucher is generated and the account balance changes |
+| **Teller** | Open KYC review and change a customer's KYC tier | The new tier shows on the customer's profile |
+| **Admin** | Open the AML queue, then the Audit Trail | The flagged transfer is listed, and each state change shows its actor, time and before/after values |
 
-Keyboard shortcuts: Alt + ← goes back through your view history. Other shortcuts are listed in App.tsx.
+**Keyboard shortcuts:** `Alt + ←` goes back through your view history. Other shortcuts are listed in `App.tsx`.
 
-Reset the demo: clear this site's data in your browser (DevTools → Application → Local Storage → Clear) and reload to restore the seed data.
+**Reset the demo:** clear this site's data in your browser (DevTools → Application → Local Storage → Clear) and reload to restore the seed data.
+
+---
 
 ## 3. Features
 
