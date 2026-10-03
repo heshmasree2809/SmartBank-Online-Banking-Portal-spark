@@ -1,347 +1,237 @@
-# SmartBank — Enterprise Online Banking Management Portal
+# SmartBank: Online Banking Portal (Front-End Simulation)
 
-![SmartBank Banner](https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1200&q=80)
+A role-based banking web app built with **React 19**, **TypeScript**, **Tailwind CSS v4** and **Vite**. It simulates retail banking, a branch teller console and an admin/risk console, with double-entry ledger logic, simulated OTP confirmation, a rule-based fraud flag and an audit log.
 
-> A modern, resilient, role-based Core Banking System (CBS) and customer portal built with **React 19**, **TypeScript**, **Tailwind CSS**, and **Vite**. Features multi-tier Role-Based Access Control (Customer, Branch Officer / Teller, Central Admin), dual-entry ledger transaction processing, simulated OTP authorization, AML fraud detection, bill payments, and audit tracking.
+> **Scope note:** SmartBank is a client-side project. All data (users, accounts, transactions) lives in the browser's `localStorage`, seeded from mock data. There is no real backend, no real database and no real money movement. OTP, bill payments and card controls are simulated.
+
+**Live demo:** `<add your public URL>`  |  **Source:** https://github.com/heshmasree2809/SmartBank-Online-Banking-Portal-spark
 
 ---
 
 ## Table of Contents
-- [1. About](#1-about)
-- [2. Screenshots](#2-screenshots)
-- [3. Features](#3-features)
-- [4. Tech Stack](#4-tech-stack)
-- [5. Architecture](#5-architecture)
-- [6. Database & Data Models](#6-database--data-models)
-- [7. API & Service Layer](#7-api--service-layer)
-- [8. Setup & Installation](#8-setup--installation)
-- [9. Security & Compliance](#9-security--compliance)
-- [10. Engineering Challenges & Solutions](#10-engineering-challenges--solutions)
-- [11. Future Enhancements](#11-future-enhancements)
-- [12. Author](#12-author)
+1. [About](#1-about)
+2. [Screenshots](#2-screenshots)
+3. [Features](#3-features)
+4. [Tech Stack](#4-tech-stack)
+5. [Architecture](#5-architecture)
+6. [Data Models](#6-data-models)
+7. [Service Layer](#7-service-layer)
+8. [Setup](#8-setup)
+9. [Security Notes and Limitations](#9-security-notes-and-limitations)
+10. [Engineering Challenges](#10-engineering-challenges)
+11. [Future Enhancements](#11-future-enhancements)
+12. [Author](#12-author)
 
 ---
 
 ## 1. About
 
-**SmartBank** is an enterprise-grade digital banking web application engineered to simulate core banking operations with industrial fidelity. It solves the friction of traditional internet banking by uniting retail banking operations, bank branch teller consoles, and back-office compliance monitoring into a cohesive, high-performance interface.
+SmartBank brings three banking experiences into one interface: a retail customer portal, a branch teller console and a central admin console. It was built to practice modeling banking rules (ledger entries, transfer limits, beneficiary cooling periods, fraud flags) in a typed React application.
 
-The platform enforces zero-trust security principles, strict double-entry ledger logic, beneficiary cooling periods, dynamic transaction limits, and real-time AML (Anti-Money Laundering) anomaly flagging.
-
-### Core Objectives
-- **Zero-Latency Financial Experience**: Instant balance updates, reactive event streaming, and optimistic UI transitions.
-- **Strict Role-Based Segregation (RBAC)**: Custom operational views for Retail Customers, Branch Officers, and Central Bank Admins.
-- **Regulatory-Grade Auditability**: Cryptographic hash chaining, tamper-evident audit logs, and verified printable statement generation.
+### Goals
+- **Responsive feel:** balances update immediately after a transfer through an observable store.
+- **Role separation:** distinct views for Customers, Branch Officers and Admins.
+- **Traceability:** every state change is written to an audit log, and statements can be printed.
 
 ---
 
 ## 2. Screenshots
 
-| Customer Dashboard | Money Transfer & OTP Verification |
-|:---:|:---:|
-| ![Dashboard Preview](https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=600&q=80) | ![Transfer Flow](https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=600&q=80) |
-| *Real-time balance, spending breakdown & quick actions* | *Beneficiary selection, transfer limits & OTP security* |
+> Replace these placeholders with real screenshots from the running app (save them in `docs/screenshots/`).
 
-| Employee / Teller Desk | Enterprise Admin & AML Portal |
+| Customer Dashboard | Money Transfer and OTP |
 |:---:|:---:|
-| ![Teller Desk](https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=600&q=80) | ![Admin Console](https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=600&q=80) |
-| *Cash deposit/withdrawal, loan underwriting & KYC approval* | *System liquidity, fraud risk queue & IAM role control* |
+| `docs/screenshots/dashboard.png` | `docs/screenshots/transfer.png` |
+
+| Teller Desk | Admin and AML Queue |
+|:---:|:---:|
+| `docs/screenshots/teller.png` | `docs/screenshots/admin.png` |
 
 ---
 
 ## 3. Features
 
-### 👤 Retail Customer Banking
-- **Multi-Account Portfolio**: Manage Savings, Current, Salary, and Fixed Deposit accounts with real-time balance calculations.
-- **Fund Transfers (NEFT / RTGS / IMPS / Internal)**: Instant inter-bank and intra-bank transfers with account masking and validation.
-- **Two-Factor OTP Security**: Secure OTP authentication modal with interactive auto-fill, resend cooldowns, and transaction confirmation.
-- **Beneficiary Lifecycle Manager**: Add, verify, nickname, and delete beneficiaries with a regulatory 30-minute cooling period.
-- **Utility & BBPS Bill Payments**: Recharge mobile, pay electricity, water, gas, broadband, and credit card bills with simulated receipt generation.
-- **Card Security & Controls**: Instant card lock/freeze, toggle contactless (NFC) payments, international transactions, and adjust daily ATM/POS spending limits.
-- **Verified Statement Generator**: Filter transactions by date range, account, and type; download stamped legal PDF/print statements.
-- **Support & Service Desk**: Raise banking tickets (Chargeback, Cheque Book, KYC update, Card replacement) with live SLA resolution trackers.
-- **Profile & Security Center**: Manage contact information, residential address, avatar selection, biometric/2FA settings, and review active sessions.
+### Retail Customer
+- **Multiple account types:** Savings, Current, Salary and Fixed Deposit, with calculated balances.
+- **Fund transfers:** Internal, NEFT, RTGS and IMPS modes with account masking and input validation.
+- **Simulated OTP confirmation:** a 6-digit OTP modal with resend cooldown (the code is generated client-side for demo purposes).
+- **Beneficiary manager:** add, nickname and delete payees, with a 30-minute cooling period on new payees.
+- **Bill payments:** simulated BBPS-style billers (mobile, electricity, water, gas, broadband, credit card) with receipts.
+- **Card controls:** lock/unlock, contactless and international toggles, and daily ATM/POS limits.
+- **Statement generator:** filter by date range, account and type, then print or save as PDF.
+- **Service desk:** raise tickets (chargeback, cheque book, KYC update, card replacement) with SLA timers.
+- **Profile and security settings:** contact details, address, avatar and 2FA preference.
 
-### 🏦 Bank Employee / Teller Console
-- **Cash Operations Desk**: Deposit and withdrawal processing with cash voucher generator and balance validations.
-- **KYC & Account Onboarding**: Review customer identity documents (PAN, Aadhaar), update KYC tiers (Tier 1, Tier 2, Full KYC), and approve applications.
-- **Loan Underwriting**: Loan origination desk with credit score verification, EMI calculator, and loan disbursement controls.
-- **Support Ticket Resolution**: Triage and resolve escalated customer service requests with SLA timers.
-- **Branch Vault Balance**: Track physical cash-in-vault vs. electronic ledger reserves in real time.
+### Branch Teller Console
+- **Cash desk:** deposits and withdrawals with a voucher and balance checks.
+- **KYC review:** view submitted details and update KYC tier.
+- **Loan desk:** credit score check, EMI calculator and disbursement flow.
+- **Ticket resolution:** triage customer tickets with SLA timers.
+- **Vault balance:** compare physical cash against ledger reserves.
 
-### 🛡️ Central Bank Administration & Risk Portal
-- **AML & Fraud Detection Queue**: Rule-based transaction anomaly detector (high value velocity, abnormal geolocation, threshold breaches).
-- **IAM User & Role Administration**: Manage system users, toggle status (`ACTIVE`, `SUSPENDED`), and elevate permissions (`CUSTOMER`, `BANK_EMPLOYEE`, `ADMIN`).
-- **Core Banking Configuration**: Adjust base savings interest rates, lending rates, daily transfer limits, and cooling period durations.
-- **Tamper-Evident Audit Trail**: Real-time event log capturing IP addresses, actors, timestamped operations, and before/after state diffs.
+### Admin and Risk Console
+- **Fraud/AML queue:** rule-based flags for high-value transactions and rapid consecutive transfers.
+- **User and role management:** change user status (`ACTIVE`, `SUSPENDED`) and role (`CUSTOMER`, `BANK_EMPLOYEE`, `ADMIN`).
+- **Configuration:** adjust interest rates, daily transfer limits and the cooling period.
+- **Audit trail:** log of actors, timestamps and operations with before/after values.
 
 ---
 
 ## 4. Tech Stack
 
-| Layer | Technology | Description |
-|---|---|---|
-| **Frontend Framework** | React 19 (`19.0.1`) | Modern declarative UI with Concurrent Mode support |
-| **Language** | TypeScript (`~5.8.2`) | Strict type checking, interfaces, and discriminated unions |
-| **Styling & Design** | Tailwind CSS (`^4.1.14`) | Responsive utility-first design system with dark palette |
-| **Icons** | Lucide React (`^0.546.0`) | Comprehensive banking and enterprise vector icon suite |
-| **Animations** | Motion (`^12.23.24`) | Smooth layout transitions and interactive UI feedback |
-| **Data Visualizations** | Recharts (`^3.10.1`) | Analytical cash flow and spending distribution charts |
-| **Build Tooling** | Vite (`^6.2.3`) | Ultra-fast HMR and optimized production bundling |
-| **Server & Runtime** | Node.js + Express (`^4.21.2`) | Server-side proxy and application hosting |
-| **State Persistence** | Reactive LocalStore | Multi-tab synchronized state with observable subscriptions |
+| Layer | Technology |
+|---|---|
+| UI framework | React 19 |
+| Language | TypeScript 5.8 |
+| Styling | Tailwind CSS v4 |
+| Icons | Lucide React |
+| Animation | Motion |
+| Charts | Recharts |
+| Build tool | Vite 6 |
+| State and persistence | Custom observable store (`BankingStore`) backed by `localStorage` |
+
+No backend server or database is used.
 
 ---
 
 ## 5. Architecture
 
-SmartBank utilizes a clean, decoupled architecture separating the presentation layer, client-side domain store, state observers, and secure data persistence.
-
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│                          SMARTBANK CLIENT UI                           │
-│  ┌──────────────────────┬──────────────────────┬────────────────────┐  │
-│  │   Customer Portal    │   Teller / Officer   │   Central Admin    │  │
-│  │ (Transfers, Bills,   │ (Cash Ops, Loans,    │ (AML Fraud, IAM,   │  │
-│  │  Cards, Statements)  │  KYC Verification)   │  Audit, Rates)     │  │
-│  └──────────┬───────────┴──────────┬───────────┴──────────┬─────────┘  │
-│             │                      │                      │            │
-│             ▼                      ▼                      ▼            │
-│  ┌──────────────────────────────────────────────────────────────────┐  │
-│  │                 GLOBAL APP SHELL & ROUTER                        │  │
-│  │  - Navigation History Stack & Breadcrumb Bar                     │  │
-│  │  - Role Guard & RBAC Permission Filter                           │  │
-│  │  - Global Hotkey Manager (Ctrl+D, Ctrl+T, Ctrl+S, Alt+←)         │  │
-│  └─────────────────────────────────┬────────────────────────────────┘  │
-└────────────────────────────────────┼───────────────────────────────────┘
-                                     │
-                                     ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│                        CORE BANKING SERVICE LAYER                      │
-│  ┌──────────────────────────────────────────────────────────────────┐  │
-│  │                      BankingStore (Singleton)                    │  │
-│  │  - Observable Event Bus (Subscriber Notification)                │  │
-│  │  - Double-Entry Ledger Engine                                    │  │
-│  │  - AML Rule Evaluator & Anomaly Scorer                           │  │
-│  │  - Transfer Daily Limit Validator & Cooling Period Enforcer      │  │
-│  │  - OTP Generator & Hash Verifier                                 │  │
-│  └─────────────────────────────────┬────────────────────────────────┘  │
-└────────────────────────────────────┼───────────────────────────────────┘
-                                     │
-                                     ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│                      PERSISTENCE & STORAGE LAYER                       │
-│  ┌───────────────────────────┬──────────────────────────────────────┐  │
-│  │   LocalStorage (Engine)   │      In-Memory Seed State Backup     │  │
-│  │  - Accounts, Users, Txns  │     - 3 Multi-Role Demo Profiles     │  │
-│  │  - Cards, Loans, Audits   │     - Simulated BBPS Biller Database │  │
-│  └───────────────────────────┴──────────────────────────────────────┘  │
-└────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│                       React UI (Vite)                        │
+│   Customer Portal   |   Teller Console   |   Admin Console   │
+└──────────────────────────────┬───────────────────────────────┘
+                               │
+                    App shell: view router,
+                    role guard, hotkeys, history stack
+                               │
+┌──────────────────────────────▼───────────────────────────────┐
+│                 BankingStore (singleton service)             │
+│  - Observable subscriptions (UI re-renders on change)        │
+│  - Double-entry ledger logic for transfers                   │
+│  - Daily limit and cooling-period checks                     │
+│  - Rule-based AML flagging                                   │
+│  - Simulated OTP generation and check                        │
+└──────────────────────────────┬───────────────────────────────┘
+                               │
+┌──────────────────────────────▼───────────────────────────────┐
+│              localStorage + seeded mock data                 │
+│   accounts, users, transactions, cards, loans, audit logs    │
+└──────────────────────────────────────────────────────────────┘
 ```
 
-### Component Hierarchy
+### Project structure
 ```
 src/
-├── App.tsx                    # Main App Controller, Hotkey & Navigation Engine
-├── main.tsx                   # React 19 Root Hydration
-├── types.ts                   # Domain Types & RBAC Definitions
-├── data/
-│   └── mockData.ts            # Seed accounts, users, billers, and audit logs
-├── services/
-│   └── bankingStore.ts        # Singleton Banking Engine & Ledger Transaction Core
+├── App.tsx                # App controller, hotkeys, navigation
+├── main.tsx               # React root
+├── types.ts               # Domain types and role definitions
+├── data/mockData.ts       # Seed users, accounts, billers, audit entries
+├── services/bankingStore.ts   # Store and ledger logic
 └── components/
-    ├── accounts/              # Account details, balance breakdown, statements
-    ├── admin/                 # Admin console, AML risk queue, audit logs
-    ├── auth/                  # Login, registration, password reset, 1-click roles
-    ├── beneficiaries/         # Beneficiary management with cooling period
-    ├── bills/                 # Utility payments & BBPS simulated billers
-    ├── cards/                 # Debit/Credit card management, limits, lock/unlock
-    ├── common/                # Header, Sidebar, NavigationBar, OtpModal, ReceiptModal
-    ├── dashboard/             # Customer dashboard & financial analytics
-    ├── employee/              # Teller desk, loan approval, KYC verification
-    ├── profile/               # Customer profile, avatar selector, security settings
-    ├── statements/            # Verified printable statement generator
-    ├── support/               # Service requests, ticket creator & SLA tracker
-    ├── transactions/          # Transaction history with filters & search
-    └── transfers/             # Money transfer wizard with OTP authorization
+    ├── accounts/  admin/  auth/  beneficiaries/  bills/  cards/
+    ├── common/  dashboard/  employee/  profile/  statements/
+    └── support/  transactions/  transfers/
 ```
 
 ---
 
-## 6. Database & Data Models
+## 6. Data Models
 
-The system model mirrors an industrial relational schema with foreign key relationships, balance constraints, and immutable audit logs.
+Entities are modeled as TypeScript types with relational-style references (stored as JSON in `localStorage`, not in a SQL database).
 
-```
-       ┌──────────────────────┐
-       │         USER         │
-       ├──────────────────────┤
-       │ id (PK)              │
-       │ email                │
-       │ role (ENUM)          │
-       │ kycTier              │
-       │ twoFactorEnabled     │
-       └──────────┬───────────┘
-                  │ 1
-                  │
-                  ├────────────────────────────┬────────────────────────────┐
-                  │ 1..*                       │ 1..*                       │ 1..*
-                  ▼                            ▼                            ▼
-       ┌──────────────────────┐     ┌──────────────────────┐     ┌──────────────────────┐
-       │     BANK_ACCOUNT     │     │     BENEFICIARY      │     │      BANK_CARD       │
-       ├──────────────────────┤     ├──────────────────────┤     ├──────────────────────┤
-       │ id (PK)              │     │ id (PK)              │     │ id (PK)              │
-       │ userId (FK)          │     │ userId (FK)          │     │ userId (FK)          │
-       │ accountNumber (UQ)   │     │ accountNumber        │     │ accountId (FK)       │
-       │ accountType          │     │ ifsc                 │     │ cardNumber (Masked)  │
-       │ currentBalance       │     │ status (COOLING/ACT) │     │ isLocked             │
-       │ dailyLimit           │     │ coolingEndsAt        │     │ dailyLimit           │
-       └──────────┬───────────┘     └──────────────────────┘     └──────────────────────┘
-                  │ 1
-                  │
-                  ├────────────────────────────┬────────────────────────────┐
-                  │ 1..*                       │ 1..*                       │ 1..*
-                  ▼                            ▼                            ▼
-       ┌──────────────────────┐     ┌──────────────────────┐     ┌──────────────────────┐
-       │     TRANSACTION      │     │     BILL_PAYMENT     │     │    SERVICE_REQUEST   │
-       ├──────────────────────┤     ├──────────────────────┤     ├──────────────────────┤
-       │ id (PK)              │     │ id (PK)              │     │ id (PK)              │
-       │ accountId (FK)       │     │ accountId (FK)       │     │ userId (FK)          │
-       │ amount               │     │ billerCategory       │     │ ticketNumber         │
-       │ flow (DEBIT/CREDIT)  │     │ billerName           │     │ status (OPEN/RESOLV) │
-       │ isSuspicious (AML)   │     │ referenceId          │     │ priority             │
-       └──────────────────────┘     └──────────────────────┘     └──────────────────────┘
-```
+- **User:** `id`, `email`, `role`, `kycTier`, `twoFactorEnabled`
+- **BankAccount:** `id`, `userId`, `accountNumber`, `accountType`, `currentBalance`, `dailyLimit`
+- **Beneficiary:** `id`, `userId`, `accountNumber`, `ifsc`, `status` (`COOLING` / `ACTIVE`), `coolingEndsAt`
+- **BankCard:** `id`, `userId`, `accountId`, masked number, `isLocked`, `dailyLimit`
+- **Transaction:** `id`, `accountId`, `amount`, `flow` (`DEBIT` / `CREDIT`), `isSuspicious`
+- **BillPayment** and **ServiceRequest:** linked to accounts and users by id
 
 ---
 
-## 7. API & Service Layer
+## 7. Service Layer
 
-The internal banking service (`bankingStore`) exposes a synchronous, transactional interface that adheres to atomic ledger operations.
+`bankingStore` exposes synchronous methods used by the UI:
 
-### Core Banking Methods
+| Area | Methods |
+|---|---|
+| Session | `login`, `logout`, `switchRole` (demo persona switcher), `updateUser` |
+| Transfers | `processTransfer`, `getTransactions`, `flagSuspiciousTransaction` |
+| Beneficiaries | `addBeneficiary`, `deleteBeneficiary` |
+| Cards | `toggleCardLock`, `updateCardLimits`, `toggleCardFeature` |
 
-#### 1. Authentication & IAM
-| Method | Parameters | Return | Description |
-|---|---|---|---|
-| `login(email, role?)` | `email: string, role?: UserRole` | `{ success: boolean, user?: User }` | Authenticates user or provisions session |
-| `logout()` | None | `void` | Clears active session |
-| `switchRole(role)` | `role: UserRole` | `User` | Fast persona switcher for testing |
-| `updateUser(userId, updates)` | `userId: string, updates: Partial<User>` | `User` | Updates contact/security profile |
-
-#### 2. Transactions & Transfers
-| Method | Parameters | Return | Description |
-|---|---|---|---|
-| `processTransfer(payload)` | `{ fromAccountId, toAccountNumber, amount, remarks, ... }` | `{ success: boolean, transaction?: Transaction, message?: string }` | Executes atomic debit/credit transfer |
-| `getTransactions(userId?, accountId?)` | `userId?: string, accountId?: string` | `Transaction[]` | Retrieves filtered transaction history |
-| `flagSuspiciousTransaction(txnId, reason)` | `txnId: string, reason: string` | `void` | Flags transaction for AML compliance review |
-
-#### 3. Beneficiary Management
-| Method | Parameters | Return | Description |
-|---|---|---|---|
-| `addBeneficiary(beneficiary)` | `Omit<Beneficiary, 'id' \| 'createdAt'>` | `Beneficiary` | Registers beneficiary with 30m cooling period |
-| `deleteBeneficiary(id)` | `id: string` | `boolean` | Removes beneficiary record |
-
-#### 4. Card & Account Security
-| Method | Parameters | Return | Description |
-|---|---|---|---|
-| `toggleCardLock(cardId)` | `cardId: string` | `BankCard` | Locks/unlocks card instantly |
-| `updateCardLimits(cardId, limits)` | `cardId: string, limits: object` | `BankCard` | Updates POS/ATM spending limits |
-| `toggleCardFeature(cardId, feature)` | `cardId: string, feature: string` | `BankCard` | Toggles contactless/online usage |
+`login` is a demo flow with no password verification, and `switchRole` exists for testing the three role views.
 
 ---
 
-## 8. Setup & Installation
+## 8. Setup
 
-### Prerequisites
-- **Node.js**: `v18.0.0` or higher
-- **npm**: `v9.0.0` or higher
+**Requirements:** Node.js 18+ and npm 9+
 
-### 1. Clone the Repository
 ```bash
 git clone https://github.com/heshmasree2809/SmartBank-Online-Banking-Portal-spark.git
 cd SmartBank-Online-Banking-Portal-spark
-```
-
-### 2. Install Dependencies
-```bash
 npm install
-```
-
-### 3. Start Development Server
-```bash
-npm run dev
-```
-The application will launch on `http://localhost:3000`.
-
-### 4. Build for Production
-```bash
-npm run build
-```
-Generates production-optimized static assets in the `dist/` directory.
-
-### 5. Run Type Checks & Linting
-```bash
-npm run lint
+npm run dev      # http://localhost:3000
+npm run build    # production bundle in dist/
+npm run lint     # TypeScript type check (tsc --noEmit)
 ```
 
 ---
 
-## 9. Security & Compliance
+## 9. Security Notes and Limitations
 
-```
-                                  SECURITY MATRIX
-┌─────────────────────────┬────────────────────────────────────────────────────────┐
-│ Security Control        │ Implementation Mechanism                               │
-├─────────────────────────┼────────────────────────────────────────────────────────┤
-│ Role-Based Access (RBAC)│ Protected route guards & UI view-level authorization   │
-│ Transfer Verification   │ Multi-factor 6-digit OTP challenge modal               │
-│ Velocity Limiting       │ Per-account daily transfer quotas with live tracking   │
-│ Fraud & AML Detection   │ Heuristic scoring engine detecting anomaly spikes      │
-│ Data Masking            │ Account numbers & card numbers masked with SHA hashes  │
-│ Cooling Period Policy   │ 30-minute lockdown on newly registered payees          │
-│ Tamper-Evident Auditing │ Structured audit log trail tracking every state change │
-│ XSS & Injection Defense │ Sanitized input bindings & strict TypeScript typings   │
-└─────────────────────────┴────────────────────────────────────────────────────────┘
-```
+SmartBank demonstrates banking *rules and flows*, not production security. Because everything runs in the browser:
+
+| Area | What the project does | Limitation |
+|---|---|---|
+| Role access | Role-based views and route guards in the UI | Not enforced by a server; a user could alter local state |
+| OTP | Simulated 6-digit confirmation step | Generated client-side; not a real second factor |
+| Daily limits | Per-account daily transfer limit check | Enforced client-side |
+| Fraud flagging | Rules for high-value (above ₹1,00,000) and rapid consecutive transfers | Simple heuristics, not a risk model |
+| Cooling period | 30-minute hold on new beneficiaries | Based on local timestamps |
+| Audit log | Records state changes with actor, time and before/after values | Stored in `localStorage` and not tamper-proof |
+| Data masking | Account and card numbers shown masked in the UI | Display masking only |
+| Input handling | TypeScript types and form validation; React escapes rendered text | Not a substitute for server-side validation |
+
+A production system would need a server-side API, a real database, real authentication, and server-enforced authorization and limits.
 
 ---
 
-## 10. Engineering Challenges & Solutions
+## 10. Engineering Challenges
 
-### 1. Atomic Multi-Account State Consistency
-- **Challenge**: Guaranteeing that transferring funds simultaneously debits the sender and credits the receiver without partial failures or race conditions.
-- **Solution**: Implemented an atomic transaction execution routine inside `bankingStore.processTransfer()`. Both balance mutations and ledger records are created synchronously before notifying reactive listeners.
+### 1. Keeping transfer state consistent
+**Problem:** a transfer must debit one account and credit another without leaving a half-applied state.
+**Approach:** `processTransfer()` validates inputs, then applies both balance changes and writes the ledger entries in one synchronous step before notifying subscribers. Because this runs in a single browser thread, there are no concurrent writers; a real multi-user system would need database transactions.
 
-### 2. Backward Navigation Stack in Single-Page View Architectures
-- **Challenge**: Standard browser back buttons can desynchronize internal view state in complex component-routed dashboards.
-- **Solution**: Developed a custom `viewHistory` stack with hierarchical breadcrumb resolution and keyboard shortcuts (`Alt + ←`), allowing smooth historical traversal across all customer, teller, and admin modules.
+### 2. Navigation history across role-based views
+**Problem:** the browser back button did not match the in-app view state in a multi-role dashboard.
+**Approach:** a custom `viewHistory` stack with breadcrumbs and an `Alt + ←` shortcut for stepping back.
 
-### 3. Real-Time AML Fraud Rule Engine
-- **Challenge**: Flagging high-risk transactions without inducing client latency or complex backend orchestration.
-- **Solution**: Created a modular rule pipeline assessing transaction velocity, threshold breaches (single transactions > ₹1,00,000), and rapid consecutive transfers, automatically tagging transactions with `isSuspicious` flags for administrative review.
+### 3. Rule-based fraud flagging
+**Problem:** flag risky transfers without a backend.
+**Approach:** a small rule pipeline checks transfer size (above ₹1,00,000) and rapid consecutive transfers, then sets an `isSuspicious` flag that appears in the admin queue.
 
 ---
 
 ## 11. Future Enhancements
 
-- [ ] **WebAuthn / FIDO2 Biometric Login**: Direct biometric fingerprint and FaceID authorization using Web Authentication APIs.
-- [ ] **AI-Powered Financial Insights**: Personalized budget forecasting, subscription leak detection, and cash-flow predictions.
-- [ ] **Multi-Currency Forex Wallets**: Support for holding, converting, and sending USD, EUR, GBP, and SGD balances.
-- [ ] **Push Notification WebSockets**: Real-time push alerts for inbound credits, card swipes, and security logins.
-- [ ] **Open Banking / Account Aggregator Integration**: Unified dashboard aggregating external accounts via RBI Account Aggregator framework.
+- [ ] Real backend API with a database and server-side authorization
+- [ ] Password hashing and token-based authentication
+- [ ] Automated tests (unit tests for `bankingStore`, end-to-end tests for transfer and OTP flows)
+- [ ] WebAuthn / FIDO2 login
+- [ ] Multi-currency wallets
+- [ ] Push notifications for credits and security events
 
 ---
 
 ## 12. Author
 
 **Avuthu Heshma Sree**
-- **Role**: Lead Full-Stack Software Engineer
-- **Email**: [avuthuheshmasree@gmail.com](mailto:avuthuheshmasree@gmail.com)
-- **GitHub**: [heshmasree2809](https://github.com/heshmasree2809)
-- **Repository**: [SmartBank-Online-Banking-Portal-spark](https://github.com/heshmasree2809/SmartBank-Online-Banking-Portal-spark)
-- **Project**: SmartBank Enterprise Online Banking Management Portal
-- **Date**: August 2026
+- GitHub: [heshmasree2809](https://github.com/heshmasree2809)
+- Email: avuthuheshmasree@gmail.com
+- Built: August 2026
 
----
-*SmartBank — Enterprise Core Banking Architecture.*
+## License
+
+Add a `LICENSE` file (for example MIT) to the repository and state it here.
