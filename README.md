@@ -9,7 +9,7 @@ A role-based banking web app built with **React 19**, **TypeScript**, **Tailwind
 
 ## Table of Contents
 1. [About](#1-about)
-2. [Screenshots](#2-screenshots)
+2. [Demo Walkthrough](#2-demo-walkthrough)
 3. [Features](#3-features)
 4. [Tech Stack](#4-tech-stack)
 5. [Architecture](#5-architecture)
@@ -34,19 +34,22 @@ SmartBank brings three banking experiences into one interface: a retail customer
 
 ---
 
-## 2. Screenshots
+## 2. Demo Walkthrough
 
-> Replace these placeholders with real screenshots from the running app (save them in `docs/screenshots/`).
+Open the app and use the one-click role buttons on the login screen to switch between the three seeded demo profiles. Each walkthrough takes about a minute.
 
-| Customer Dashboard | Money Transfer and OTP |
-|:---:|:---:|
-| `docs/screenshots/dashboard.png` | `docs/screenshots/transfer.png` |
+Role	Try this	What to look for
+Customer	Go to Transfers, pick an account, choose a saved beneficiary and send a small amount	The OTP modal appears, then the balances update immediately and a receipt is shown
+Customer	Add a new beneficiary, then try to send money to it right away	The payee is in a 30-minute cooling period and the transfer is blocked
+Customer	Send a transfer above ₹1,00,000	The transaction is marked suspicious and appears in the admin fraud queue
+Customer	Open Cards and lock a card, then change a daily limit	The card status and limit update straight away
+Teller	Open the Cash Desk and record a deposit or withdrawal	A cash voucher is generated and the account balance changes
+Teller	Open KYC review and change a customer's KYC tier	The new tier shows on the customer's profile
+Admin	Open the AML queue, then the Audit Trail	The flagged transfer is listed, and each state change shows its actor, time and before/after values
 
-| Teller Desk | Admin and AML Queue |
-|:---:|:---:|
-| `docs/screenshots/teller.png` | `docs/screenshots/admin.png` |
+Keyboard shortcuts: Alt + ← goes back through your view history. Other shortcuts are listed in App.tsx.
 
----
+Reset the demo: clear this site's data in your browser (DevTools → Application → Local Storage → Clear) and reload to restore the seed data.
 
 ## 3. Features
 
